@@ -393,7 +393,7 @@ function receivedPostback(event) {
                      if (data) {          
                       writelog(senderID,"No","USER");          
                      assignmission(senderID,data.first_name+" "+data.last_name,data.profile_pic,"Q1NO",recipientID);   
-                      sendTextMessage(senderID,"Thank You");
+                     
                     
                      }
                      }); 
