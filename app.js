@@ -379,12 +379,7 @@ function receivedPostback(event) {
              fb.api('/' + senderID + '', function (err, data) {            
                      if (data) {  
                      writelog(senderID,"Yes","USER");                  
-                     assignmission(senderID,data.first_name+" "+data.last_name,data.profile_pic,"Q1YES",recipientID);                      
-               
-       setTimeout(function () {
-          sendTextMessage(senderID, "How many window you have? [Please enter the number]"); 
-        }, 700);
-                      
+                     assignmission(senderID,data.first_name+" "+data.last_name,data.profile_pic,"Q1YES",recipientID); 
                      }
                      }); 
      
@@ -404,14 +399,7 @@ function receivedPostback(event) {
                      }); 
  
  
-  }
-  else if(payload=="Q2YES")
-  {
-  writelog(senderID,"Yes","USER");
-   SendQ2status(senderID,"Q2YES");
-  sendTextMessage(senderID,"Please use the camera button below to take a photo of the invoice and send it.");
-   
-  }
+  }  
   else if(payload=="USER_DEFINED_PAYLOAD")
   {
    sendTextMessage(senderID, "Welcome!!!"); 
@@ -440,13 +428,7 @@ function receivedPostback(event) {
           sendGenericMessage(senderID,messageData); 
         }, 500);
       
-  }
-  else if(payload=="Q2NO"){ 
-   writelog(senderID,"No","USER");
-  SendQ2status(senderID,"Q2NO");   
-  sendTextMessage(senderID,"How many unique soft drink items (SKUs) you purchased today for which you do not have the invoice? - Example: If you purchased Coke 200 ML plastic and Coke 100 ML glass, please enter 2.[Please enter the number]");
-   
-  }
+  }   
   else if(payload=="Q4NO")
   {
     writelog(senderID,"No","USER");
@@ -457,35 +439,25 @@ function receivedPostback(event) {
     writelog(senderID,"Yes","USER");
    checkstatus(senderID,"Q4YES","text","");  
   }
-  else if(payload=="MOREITEMSYES")
+   else if(payload=="Q7NO")
   {
-   writelog(senderID,"Yes","USER");
-  checkstatus(senderID,"MOREITEMSYES","text","");  
+    writelog(senderID,"No","USER");
+  checkstatus(senderID,"Q7NO","text","");  
   }
-  else if(payload=="MOREITEMSNO")
+   else if(payload=="Q7YES")
   {
-   writelog(senderID,"No","USER");
-  checkstatus(senderID,"MOREITEMSNO","text","");   
+    writelog(senderID,"Yes","USER");
+   checkstatus(senderID,"Q7YES","text","");  
   }
-  else if(payload=="FINALCONFIRMYES")
+   else if(payload=="Q8NO")
   {
-   writelog(senderID,"Yes","USER");
-  checkstatus(senderID,"FINALCONFIRMYES","text","");  
+    writelog(senderID,"No","USER");
+  checkstatus(senderID,"Q8NO","text","");  
   }
-  else if(payload=="FINALCONFIRMNO")
+   else if(payload=="Q8YES")
   {
-   writelog(senderID,"No","USER");
-  checkstatus(senderID,"FINALCONFIRMNO","text","");   
-  }
-  else if(payload=="ISPICYES")
-  {
-   writelog(senderID,"Yes","USER");
-   checkstatus(senderID,"ISPICYES","text","");   
-  }
-   else if(payload=="ISPICNO")
-  {
-   writelog(senderID,"Yes","USER");
-   checkstatus(senderID,"ISPICNO","text","");   
+    writelog(senderID,"Yes","USER");
+   checkstatus(senderID,"Q8YES","text","");  
   }
 
   // When a postback is called, we'll send a message back to the sender to 
@@ -658,6 +630,7 @@ var http = require('http');
         res.on('data', function (data) {
             process.stdout.write(data);    
             var status=data.toString("utf8").replace('"', '').replace('"', '');
+              sendTextMessage(id, "How many window you have? [Please enter the number]"); 
             console.log(status);                 
         });
     });
@@ -671,61 +644,6 @@ var http = require('http');
     });
 }
 
-//send q2 status
-
-function SendQ2status(id,Status)
-{
-
-var http = require('http');
-    var QTwostatus = JSON.stringify({       
-        'UID': '' + id + '',        
-        'Status': '' + Status + ''
-    });
-
-
-    //5
-    var extServeroptionspost = {
-        host: '202.89.107.58',
-        port: '80',
-        path: '/BOTAPI/api/QTwostatus',
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Content-Length': QTwostatus.length
-        }
-    };
-
-
-
-    //6
-    var reqPost = http.request(extServeroptionspost, function (res) {      
-        res.on('data', function (data) {
-            process.stdout.write(data);    
-            var status=data.toString("utf8").replace('"', '').replace('"', '');
-            console.log(status);                 
-        });
-    });
-
-
-    // 7
-    reqPost.write(QTwostatus);
-    reqPost.end();
-    reqPost.on('error', function (e) {
-        console.error(e);
-    });
-}
-
-
-//read query string
- function getParamValuesByName(querystring,q) {
-        var qstring =q.slice(q.indexOf('?') + 1).split('&');
-        for (var i = 0; i < qstring.length; i++) {
-            var urlparam = qstring[i].split('=');
-            if (urlparam[0] == querystring) {
-                return urlparam[1];
-            }
-        }
-    }
 
 
 function checkstatus(id,text,type,files,imgtext,logo,labels)
@@ -820,10 +738,110 @@ var http = require('http');
     };
       sendGenericMessage(id,messageData);  
       }
-      else if(status=="Q2"){    
-
-        sendTextMessage(senderID, "How many window you have? [Please enter the number]"); 
+      else if(status=="Q2"){ 
+        sendTextMessage(id, "How many window you have? [Please enter the number]"); 
       } 
+      else if(status=="Q4")
+      {
+      var messageData = {
+        "attachment": {
+            "type": "template",
+            "payload": {
+                "template_type": "generic",
+                "elements": [{
+                    "title": "Do you have Visicooler?",
+                    "subtitle": "",
+                    "buttons": [{
+                        "type": "postback",
+                        "title": "Yes",
+                        "payload": "Q4YES"
+                    }, {
+                        "type": "postback",
+                        "title": "No",
+                        "payload": "Q4NO"
+                    }]
+                }]
+            }
+        }
+    };
+      sendGenericMessage(id,messageData); 
+
+      }
+      else if(status=="Q4NO" || status=="Q7")
+      {
+       var messageData = {
+        "attachment": {
+            "type": "template",
+            "payload": {
+                "template_type": "generic",
+                "elements": [{
+                    "title": "Do you have Limca 500 Ml in stock?",
+                    "subtitle": "",
+                    "buttons": [{
+                        "type": "postback",
+                        "title": "Yes",
+                        "payload": "Q7YES"
+                    }, {
+                        "type": "postback",
+                        "title": "No",
+                        "payload": "Q7NO"
+                    }]
+                }]
+            }
+        }
+    };
+      sendGenericMessage(id,messageData); 
+      }
+      else if(status=="Q8")
+      {
+       var messageData = {
+        "attachment": {
+            "type": "template",
+            "payload": {
+                "template_type": "generic",
+                "elements": [{
+                    "title": "Do you have Dew 500 Ml in stock?",
+                    "subtitle": "",
+                    "buttons": [{
+                        "type": "postback",
+                        "title": "Yes",
+                        "payload": "Q8YES"
+                    }, {
+                        "type": "postback",
+                        "title": "No",
+                        "payload": "Q8NO"
+                    }]
+                }]
+            }
+        }
+    };
+      sendGenericMessage(id,messageData); 
+      }
+      else if(status=="Q8")
+      {
+       var messageData = {
+        "attachment": {
+            "type": "template",
+            "payload": {
+                "template_type": "generic",
+                "elements": [{
+                    "title": "Do you have Dew 500 Ml in stock?",
+                    "subtitle": "",
+                    "buttons": [{
+                        "type": "postback",
+                        "title": "Yes",
+                        "payload": "Q8YES"
+                    }, {
+                        "type": "postback",
+                        "title": "No",
+                        "payload": "Q8NO"
+                    }]
+                }]
+            }
+        }
+    };
+      sendGenericMessage(id,messageData); 
+      }
          else{
           sendTextMessage(id,status);   
          }
