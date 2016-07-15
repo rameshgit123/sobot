@@ -630,7 +630,34 @@ var http = require('http');
         res.on('data', function (data) {
             process.stdout.write(data);    
             var status=data.toString("utf8").replace('"', '').replace('"', '');
+            if(status=="Q4")
+            {
+            var messageData = {
+        "attachment": {
+            "type": "template",
+            "payload": {
+                "template_type": "generic",
+                "elements": [{
+                    "title": "Do you have Visicooler?",
+                    "subtitle": "",
+                    "buttons": [{
+                        "type": "postback",
+                        "title": "Yes",
+                        "payload": "Q4YES"
+                    }, {
+                        "type": "postback",
+                        "title": "No",
+                        "payload": "Q4NO"
+                    }]
+                }]
+            }
+        }
+    };
+      sendGenericMessage(id,messageData); 
+
+            }else{
               sendTextMessage(id, "How many window you have? [Please enter the number]"); 
+              }
             console.log(status);                 
         });
     });
