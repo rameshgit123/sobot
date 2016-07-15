@@ -414,6 +414,7 @@ function receivedPostback(event) {
   }
   else if(payload=="USER_DEFINED_PAYLOAD")
   {
+   sendTextMessage(senderID, "Welcome!!!"); 
       var messageData = {
         "attachment": {
             "type": "template",
@@ -435,7 +436,10 @@ function receivedPostback(event) {
             }
         }
     };
-      sendGenericMessage(senderID,messageData); 
+    setTimeout(function () {         
+          sendGenericMessage(senderID,messageData); 
+        }, 500);
+      
   }
   else if(payload=="Q2NO"){ 
    writelog(senderID,"No","USER");
