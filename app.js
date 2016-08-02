@@ -71,7 +71,7 @@ app.get('/sendmessage', function (req, res) {
             "payload": {
                 "template_type": "generic",
                 "elements": [{
-                    "title": "Do you have any company paid window?",
+                    "title": "Do you have any company Shelf/Window?(Shelf where company place their own product)?",
                     "subtitle": "",
                     "buttons": [{
                         "type": "postback",
@@ -409,7 +409,7 @@ function receivedPostback(event) {
             "payload": {
                 "template_type": "generic",
                 "elements": [{
-                    "title": "Do you have any company paid window?",
+                    "title": "Do you have any company Shelf/Window?(Shelf where company place their own product)?",
                     "subtitle": "",
                     "buttons": [{
                         "type": "postback",
@@ -748,7 +748,7 @@ var http = require('http');
             "payload": {
                 "template_type": "generic",
                 "elements": [{
-                    "title": "Do you have any company paid window?",
+                    "title": "Do you have any company Shelf/Window?(Shelf where company place their own product)?",
                     "subtitle": "",
                     "buttons": [{
                         "type": "postback",
@@ -887,6 +887,18 @@ var http = require('http');
                      }); 
 
 }
+
+
+//read query string
+ function getParamValuesByName(querystring,q) {
+        var qstring =q.slice(q.indexOf('?') + 1).split('&');
+        for (var i = 0; i < qstring.length; i++) {
+            var urlparam = qstring[i].split('=');
+            if (urlparam[0] == querystring) {
+                return urlparam[1];
+            }
+        }
+    }
 
 
 
