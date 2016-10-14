@@ -246,7 +246,7 @@ function receivedMessage(event) {
 
 
   if (messageText) {  
-  writelog(senderID,messageText,"USER");
+
   checkstatus(senderID,messageText,"text","","","","");   
     // If we receive a text message, check to see if it matches any special
     // keywords and send back the corresponding example. Otherwise, just echo
@@ -259,7 +259,7 @@ function receivedMessage(event) {
 //        sendTextMessage(senderID, messageText);
 //    }
   } else if (messageAttachments) {
-   writelog(senderID,"User Sends "+messageAttachments[0].type+"","USER");
+  
  if(messageAttachments[0].type!="image")
  { 
    checkstatus(senderID,"file",messageAttachments[0].type,messageAttachments,"","","");
@@ -378,7 +378,7 @@ function receivedPostback(event) {
 
              fb.api('/' + senderID + '', function (err, data) {            
                      if (data) {  
-                     writelog(senderID,"Yes","USER");                  
+                            
                      assignmission(senderID,data.first_name+" "+data.last_name,data.profile_pic,"Q1YES",recipientID); 
                      }
                      }); 
@@ -391,7 +391,7 @@ function receivedPostback(event) {
 
    fb.api('/' + senderID + '', function (err, data) {            
                      if (data) {          
-                      writelog(senderID,"No","USER");          
+                        
                      assignmission(senderID,data.first_name+" "+data.last_name,data.profile_pic,"Q1NO",recipientID);   
                      
                     
@@ -431,32 +431,32 @@ function receivedPostback(event) {
   }   
   else if(payload=="Q4NO")
   {
-    writelog(senderID,"No","USER");
+
   checkstatus(senderID,"Q4NO","text","");  
   }
    else if(payload=="Q4YES")
   {
-    writelog(senderID,"Yes","USER");
+   
    checkstatus(senderID,"Q4YES","text","");  
   }
    else if(payload=="Q7NO")
   {
-    writelog(senderID,"No","USER");
+    
   checkstatus(senderID,"Q7NO","text","");  
   }
    else if(payload=="Q7YES")
   {
-    writelog(senderID,"Yes","USER");
+    
    checkstatus(senderID,"Q7YES","text","");  
   }
    else if(payload=="Q8NO")
   {
-    writelog(senderID,"No","USER");
+    
   checkstatus(senderID,"Q8NO","text","");  
   }
    else if(payload=="Q8YES")
   {
-    writelog(senderID,"Yes","USER");
+   
    checkstatus(senderID,"Q8YES","text","");  
   }
 
@@ -493,6 +493,22 @@ function sendImageMessage(recipientId) {
  *
  */
 function sendTextMessage(recipientId, messageText) {
+  var messageData = {
+    recipient: {
+      id: recipientId
+    },
+    message: {
+      text: messageText
+    }
+  };
+
+  callSendAPI(messageData);
+}
+/*
+ * Send a text message using the Send API.
+ *
+ */
+function sendTextMessagewithlog(recipientId, messageText) {
 writelog(recipientId,messageText,"BOT");
   var messageData = {
     recipient: {
@@ -656,7 +672,7 @@ var http = require('http');
       sendGenericMessage(id,messageData); 
 
             }else{
-              sendTextMessage(id, "How many window you have? [Please enter the number]"); 
+              sendTextMessagewithlog(id, "How many window you have? [Please enter the number]"); 
               }
             console.log(status);                 
         });
@@ -766,7 +782,7 @@ var http = require('http');
       sendGenericMessage(id,messageData);  
       }
       else if(status=="Q2"){ 
-        sendTextMessage(id, "How many window you have? [Please enter the number]"); 
+        sendTextMessagewithlog(id, "How many window you have? [Please enter the number]"); 
       } 
       else if(status=="Q4")
       {
